@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ThreadCraft Textiles — IBM Cognos Analytics</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="brand">
+      <div class="brand-logo">TC</div>
+      <div>
+        <div class="brand-name">ThreadCraft Textiles</div>
+        <div class="brand-sub">IBM Cognos Analytics · Case Study 10</div>
+      </div>
+    </div>
+    <nav class="main-nav">
+      <a href="#overview">Overview</a>
+      <a href="#q1">Reporting</a>
+      <a href="#q4">Exploration</a>
+      <a href="#q5">Dashboard</a>
+      <a href="#q6">Story</a>
+    </nav>
+    <div class="ibm-badge">IBM</div>
+  </div>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-tag">Garments &amp; Textiles · Production &amp; Sales Analytics</div>
+    <h1 class="hero-title">ThreadCraft<br/><span class="accent">Analytics</span><br/>Story</h1>
+    <p class="hero-desc">IBM Cognos Analytics case study covering Production Efficiency, Export Fulfillment, Sales Analysis, and Operational Intelligence across factories in Tirupur &amp; Surat.</p>
+    <div class="hero-modules">
+      <span class="mod-tag">Reporting</span>
+      <span class="mod-tag">Exploration</span>
+      <span class="mod-tag">Dashboard</span>
+      <span class="mod-tag">Story Making</span>
+    </div>
+    <a href="#overview" class="hero-cta">Explore Case Study ↓</a>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-card"><div class="stat-val">92%</div><div class="stat-label">Avg Efficiency</div></div>
+    <div class="stat-card danger"><div class="stat-val">8%</div><div class="stat-label">Rejection Rate</div></div>
+    <div class="stat-card"><div class="stat-val">15</div><div class="stat-label">Retail Cities</div></div>
+    <div class="stat-card"><div class="stat-val">2</div><div class="stat-label">Factories</div></div>
+  </div>
+</section>
+
+<!-- ===== OVERVIEW ===== -->
+<section id="overview" class="section">
+  <div class="section-inner">
+    <div class="section-tag">Real-Time Business Scenario</div>
+    <h2 class="section-title">Company Overview</h2>
+    <div class="overview-grid">
+      <div class="overview-text">
+        <p>ThreadCraft Textiles is a garment manufacturer and retailer with factories in <strong>Tirupur</strong> and <strong>Surat</strong>, and retail outlets in 15 cities. The company produces men's, women's, and kids' apparel under its own brand and as private labels for international brands.</p>
+        <p>Operations management has identified issues with excess fabric waste, production delays, and inconsistent export order fulfillment. IBM Cognos Analytics is now being used to monitor production efficiency, sales, and export compliance.</p>
+      </div>
+      <div class="dataset-box">
+        <div class="dataset-title">📦 Dataset Available</div>
+        <ul class="dataset-list">
+          <li>Product Code, Garment Type, Size, Color, Fabric Type, Factory Location</li>
+          <li>Production Date, Units Planned, Units Produced, Units Rejected, Fabric Used (meters), Fabric Wasted</li>
+          <li>Order Type (Domestic/Export), Buyer Name, Order Quantity, Delivered Quantity, Delivery Date</li>
+          <li>Retail Outlet City, Units Sold, MRP, Selling Price, Revenue, Season (Summer/Winter/Festival)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Q1 — REPORTING: PRODUCTION EFFICIENCY ===== -->
+<section id="q1" class="section alt">
+  <div class="section-inner">
+    <div class="section-tag">Q1 · Reporting</div>
+    <h2 class="section-title">Production Efficiency Report</h2>
+    <p class="section-desc">Units Planned vs Units Produced vs Units Rejected by Factory Location &amp; Garment Type. Conditional styling applied: &lt;80% Red · 80–90% Amber · &gt;90% Green.</p>
+
+    <div class="controls-bar">
+      <label>Factory: <select id="factoryFilter" onchange="filterTable()">
+        <option value="all">All</option>
+        <option value="Tirupur">Tirupur</option>
+        <option value="Surat">Surat</option>
+      </select></label>
+      <label>Season: <select id="seasonFilter" onchange="filterTable()">
+        <option value="all">All</option>
+        <option value="Summer">Summer</option>
+        <option value="Winter">Winter</option>
+        <option value="Festival">Festival</option>
+      </select></label>
+    </div>
+
+    <div class="table-wrapper">
+      <table class="data-table" id="efficiencyTable">
+        <thead>
+          <tr>
+            <th>Factory</th>
+            <th>Garment Type</th>
+            <th>Season</th>
+            <th>Units Planned</th>
+            <th>Units Produced</th>
+            <th>Units Rejected</th>
+            <th>Efficiency %</th>
+          </tr>
+        </thead>
+        <tbody id="efficiencyBody"></tbody>
+      </table>
+    </div>
+
+    <div class="chart-row">
+      <div class="chart-card"><canvas id="efficiencyChart"></canvas></div>
+      <div class="insight-box">
+        <div class="insight-title">Key Insights</div>
+        <ul class="insight-list">
+          <li>Tirupur leads with <span class="green">94% avg efficiency</span></li>
+          <li>Surat Denim shows <span class="red">76% — needs intervention</span></li>
+          <li>Festival season drives highest rejection rates</li>
+          <li>T-Shirts consistently outperform jeans</li>
+        </ul>
+        <div class="legend">
+          <span class="leg green">■ &gt;90% Efficient</span>
+          <span class="leg amber">■ 80–90% Amber</span>
+          <span class="leg red">■ &lt;80% Critical</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Q2 — REPORTING: EXPORT FULFILLMENT ===== -->
+<section id="q2" class="section">
+  <div class="section-inner">
+    <div class="section-tag">Q2 · Reporting</div>
+    <h2 class="section-title">Export Order Fulfillment Report</h2>
+    <p class="section-desc">Buyer Name · Order Quantity · Delivered Quantity · Fulfillment Rate % · Delivery Status. Sorted ascending to surface worst performers.</p>
+    <div class="export-header-bar">
+      <div class="export-brand">ThreadCraft Textiles — Export Division</div>
+      <div class="export-confidential">⚠ Export Division Confidential</div>
+    </div>
+    <div class="table-wrapper">
+      <table class="data-table" id="exportTable">
+        <thead>
+          <tr>
+            <th>Buyer Name</th>
+            <th>Order Qty</th>
+            <th>Delivered Qty</th>
+            <th>Fulfillment %</th>
+            <th>Delivery Status</th>
+          </tr>
+        </thead>
+        <tbody id="exportBody"></tbody>
+      </table>
+    </div>
+    <div class="chart-row">
+      <div class="chart-card"><canvas id="exportChart"></canvas></div>
+      <div class="insight-box">
+        <div class="insight-title">Export Summary</div>
+        <ul class="insight-list">
+          <li><span class="red bold">NordStyle GmbH</span> — 68% fulfillment (Critical)</li>
+          <li><span class="amber">FashionHub UK</span> — 79% fulfillment (Delayed)</li>
+          <li><span class="green">Zara India</span> — 98% (On-Time)</li>
+          <li>Overall export compliance: <strong>83.4%</strong></li>
+        </ul>
+        <div class="footer-note">Footer: "Export Division Confidential"</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Q3 — REPORTING: SALES VISUALIZATION ===== -->
+<section id="q3" class="section alt">
+  <div class="section-inner">
+    <div class="section-tag">Q3 · Reporting</div>
+    <h2 class="section-title">Sales Revenue Visualization</h2>
+    <p class="section-desc">Interactive chart — Sales Managers can select chart type and filter by Retail City &amp; Season. Products below ₹1,00,000 highlighted in Amber.</p>
+    <div class="controls-bar">
+      <label>Chart Type:
+        <select id="chartTypeSelect" onchange="switchSalesChart()">
+          <option value="bar">Bar Chart</option>
+          <option value="pie">Pie Chart</option>
+        </select>
+      </label>
+      <label>City: <select id="cityFilter" onchange="switchSalesChart()">
+        <option value="all">All Cities</option>
+        <option value="Mumbai">Mumbai</option>
+        <option value="Delhi">Delhi</option>
+        <option value="Bengaluru">Bengaluru</option>
+        <option value="Chennai">Chennai</option>
+      </select></label>
+      <label>Season: <select id="salesSeasonFilter" onchange="switchSalesChart()">
+        <option value="all">All Seasons</option>
+        <option value="Summer">Summer</option>
+        <option value="Winter">Winter</option>
+        <option value="Festival">Festival</option>
+      </select></label>
+    </div>
+    <div class="chart-row">
+      <div class="chart-card tall"><canvas id="salesChart"></canvas></div>
+      <div class="insight-box">
+        <div class="insight-title">Revenue Highlights</div>
+        <ul class="insight-list">
+          <li>Festival season peaks at <span class="green">₹4.2L avg revenue</span></li>
+          <li>Kurtas are the top-selling garment type</li>
+          <li><span class="amber">Kids Jeans — ₹82,000</span> (below threshold)</li>
+          <li>Mumbai leads all retail cities</li>
+        </ul>
+        <div class="amber-note">⚠ Amber = Revenue below ₹1,00,000</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Q4 — EXPLORATION ===== -->
+<section id="q4" class="section">
+  <div class="section-inner">
+    <div class="section-tag">Q4 · Exploration</div>
+    <h2 class="section-title">Fabric Waste &amp; Rejection Analysis</h2>
+    <p class="section-desc">Exploring relationships between Fabric Wasted and Units Rejected. Identifying high-waste Fabric Types and Factories. Season &amp; Garment Type influence on Retail Sales.</p>
+    <div class="explore-grid">
+      <div class="chart-card"><canvas id="wasteScatter"></canvas><div class="chart-label">Fabric Wasted vs Units Rejected</div></div>
+      <div class="chart-card"><canvas id="fabricWasteBar"></canvas><div class="chart-label">Waste by Fabric Type</div></div>
+      <div class="chart-card"><canvas id="seasonSalesBar"></canvas><div class="chart-label">Season vs Retail Sales Volume</div></div>
+      <div class="insight-box full">
+        <div class="insight-title">Exploration Findings</div>
+        <ul class="insight-list">
+          <li>Strong positive correlation between Fabric Wasted &amp; Units Rejected (r = 0.82)</li>
+          <li>Denim fabric accounts for <span class="red">38% of all fabric waste</span></li>
+          <li>Surat factory: <span class="red">highest waste per unit</span> across all fabric types</li>
+          <li>Festival season drives 2.4× retail sales volume compared to Summer</li>
+          <li>Kids' garments show highest rejection in Winter season</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Q5 — DASHBOARD ===== -->
+<section id="q5" class="section alt">
+  <div class="section-inner">
+    <div class="section-tag">Q5 · Dashboard</div>
+    <h2 class="section-title">ThreadCraft Operations Dashboard</h2>
+    <div class="dash-filters">
+      <span>Filter:</span>
+      <button class="dash-btn active" onclick="setDashFilter('all', this)">All</button>
+      <button class="dash-btn" onclick="setDashFilter('Tirupur', this)">Tirupur</button>
+      <button class="dash-btn" onclick="setDashFilter('Surat', this)">Surat</button>
+      <button class="dash-btn" onclick="setDashFilter('Summer', this)">Summer</button>
+      <button class="dash-btn" onclick="setDashFilter('Winter', this)">Winter</button>
+      <button class="dash-btn" onclick="setDashFilter('Festival', this)">Festival</button>
+    </div>
+
+    <!-- KPI Tiles -->
+    <div class="kpi-grid">
+      <div class="kpi-tile"><div class="kpi-icon">🏭</div><div class="kpi-val" id="kpiUnits">1,24,800</div><div class="kpi-name">Total Units Produced</div></div>
+      <div class="kpi-tile green"><div class="kpi-icon">⚡</div><div class="kpi-val" id="kpiEff">92%</div><div class="kpi-name">Production Efficiency</div></div>
+      <div class="kpi-tile amber"><div class="kpi-icon">🧵</div><div class="kpi-val" id="kpiWaste">6.4%</div><div class="kpi-name">Fabric Waste %</div></div>
+      <div class="kpi-tile blue"><div class="kpi-icon">📦</div><div class="kpi-val" id="kpiExport">83%</div><div class="kpi-name">Export Fulfillment Rate</div></div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="dash-charts">
+      <div class="chart-card"><canvas id="dashRevBar"></canvas><div class="chart-label">Revenue by Garment Type</div></div>
+      <div class="chart-card"><canvas id="dashProdLine"></canvas><div class="chart-label">Monthly Production Trend</div></div>
+      <div class="chart-card"><canvas id="dashOrderPie"></canvas><div class="chart-label">Order Type Split</div></div>
+    </div>
+
+    <!-- Alert Table -->
+    <div class="alert-section">
+      <div class="alert-title">⚠ Alert: Orders Below 80% Fulfillment</div>
+      <table class="data-table alert-table">
+        <thead><tr><th>Buyer</th><th>Fulfillment %</th><th>Qty Gap</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>NordStyle GmbH</td><td class="red bold">68%</td><td>1,280 units</td><td><span class="badge red">Critical</span></td></tr>
+          <tr><td>FashionHub UK</td><td class="amber">79%</td><td>630 units</td><td><span class="badge amber">Warning</span></td></tr>
+          <tr><td>TrendMart US</td><td class="amber">75%</td><td>900 units</td><td><span class="badge red">Critical</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Q6 — STORY MAKING ===== -->
+<section id="q6" class="section story-section">
+  <div class="section-inner">
+    <div class="section-tag">Q6 · Story Making</div>
+    <h2 class="section-title">ThreadCraft Quarterly Review Story</h2>
+    <p class="section-desc">A Cognos Story for ThreadCraft's Quarterly Production &amp; Sales Review — 6 Scenes.</p>
+
+    <div class="story-nav">
+      <button class="story-prev" onclick="changeScene(-1)">← Prev</button>
+      <div class="story-dots" id="storyDots"></div>
+      <button class="story-next" onclick="changeScene(1)">Next →</button>
+    </div>
+
+    <div class="story-stage" id="storyStage"></div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">ThreadCraft Textiles Analytics</div>
+      <div class="footer-sub">IBM Cognos Analytics · Case Study 10 · AdroIT Technologies</div>
+    </div>
+    <div class="footer-modules">
+      <span>Reporting</span><span>Exploration</span><span>Dashboard</span><span>Story Making</span>
+    </div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
